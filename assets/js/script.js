@@ -52,6 +52,60 @@ inputId.addEventListener("change", (event) =>{
     }
 })
 
+//AGREGAR PRODUCTOS
+document.getElementById("btn-agregar").addEventListener("click", (event)=> {
+    event.preventDefault();
+    let id = crud_id.value;
+    let nombre = crud_nombre.value;
+    let descripcion = crud_descripcion.value;
+    let precio = crud_precio.value;
+    let stock = crud_stock.value;
+    
+    let nuevoProducto = new Producto(id, nombre, descripcion, precio, stock);
+    if(nuevoProducto.getProduct()){
+        alert("Ya existe un producto con dicho ID.")
+    }else{
+        nuevoProducto.addProduct();
+        cargarTabla(nuevoProducto.getProducts());
+    } 
+})
+
+//ELIMINAR PRODUCTOS
+document.getElementById("btn-eliminar").addEventListener("click", (event)=> {
+    event.preventDefault();
+    let id = crud_id.value;
+    
+    let producto = new Producto(id);
+    if(producto.getProduct()){
+        let respuesta = confirm("Está seguro que quiere eliminar el producto con ID: " + producto.id);
+        if(respuesta){
+            producto.deleteProduct();
+        cargarTabla(producto.getProducts());
+        }
+        
+    }else{
+        alert("El producto que intenta eliminar no existe en la BD.")
+    }
+    
+})
+
+//MODIFICAR PRODUCTOS
+document.getElementById("btn-modificar").addEventListener("click", (event)=> {
+    event.preventDefault();
+    let id = crud_id.value;
+    let nombre = crud_nombre.value;
+    let descripcion = crud_descripcion.value;
+    let precio = crud_precio.value;
+    let stock = crud_stock.value;
+    
+    let producto= new Producto(id, nombre, descripcion, precio, stock);
+    if(producto.getProduct()){
+        producto.updateProduct();
+        cargarTabla(producto.getProducts());
+    }else{
+        alert("El producto que intenta actualizar no existe en la BD.")
+    } 
+})
 
 function main(){
     let productosStorage = JSON.parse(localStorage.getItem("productos"));
